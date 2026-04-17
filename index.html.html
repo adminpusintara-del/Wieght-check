@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ฟอร์มตราชั่ง (พี่ไอซ์)</title>
+  <style>
+    :root {
+      --bg: #f3efe6;
+      --panel: #fffaf2;
+      --ink: #1e293b;
+      --muted: #64748b;
+      --accent: #0f766e;
+      --accent-strong: #115e59;
+      --line: #d9d4c7;
+      --ok-bg: #dcfce7;
+      --ok-ink: #166534;
+      --shadow: 0 18px 50px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(180, 83, 9, 0.12), transparent 28%),
+        linear-gradient(135deg, #f5f1e8, #efe6d8);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(100%, 760px);
+      background: rgba(255, 250, 242, 0.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(217, 212, 199, 0.9);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: 28px 28px 16px;
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.12), rgba(255, 250, 242, 0.1));
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.7rem, 2vw + 1rem, 2.4rem);
+      line-height: 1.15;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    form {
+      padding: 24px 28px 28px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    .hint {
+      margin-top: -4px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--ink);
+      padding: 14px 16px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #fff;
+      padding: 14px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 12px 24px rgba(15, 118, 110, 0.18);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.7;
+    }
+
+    .message {
+      min-height: 24px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .message.success {
+      color: var(--ok-ink);
+      background: var(--ok-bg);
+      border: 1px solid #bbf7d0;
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+
+    .message.error {
+      color: #991b1b;
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+
+    .footnote {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    iframe {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        border-radius: 20px;
+      }
+
+      .hero,
+      form {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="card">
+    <div class="hero">
+      <h1>ฟอร์มตราชั่ง (พี่ไอซ์)</h1>
+      <p class="subtitle">
+        บันทึกน้ำหนักที่ชั่งได้
+        คุณสามารถเปิดไฟล์นี้ในเบราว์เซอร์แล้วกรอกข้อมูลได้เลย
+      </p>
+    </div>
+
+    <form id="customForm">
+      <div class="grid">
+        <div class="field full">
+          <label for="recordDate">วันที่บันทึก</label>
+          <input id="recordDate" name="recordDate" type="date" required>
+        </div>
+
+        <div class="field full">
+          <label for="fieldA">ตาชั่งยาว (บันทึกน้ำหนักที่ชั่งได้)</label>
+          <input id="fieldA" name="fieldA" type="text" required>
+          <div class="hint">เชื่อมกับ `entry.1136202422`</div>
+        </div>
+
+        <div class="field full">
+          <label for="fieldB">ตาชั่งสั้น (บันทึกน้ำหนักที่ชั่งได้)</label>
+          <input id="fieldB" name="fieldB" type="text" required>
+          <div class="hint">เชื่อมกับ `entry.1761665908`</div>
+        </div>
+
+        <div class="field">
+          <label for="fieldC">ตาชั่งเล็ก 1 (บันทึกน้ำหนักที่ชั่งได้)</label>
+          <input id="fieldC" name="fieldC" type="text" required>
+          <div class="hint">เชื่อมกับ `entry.624693527`</div>
+        </div>
+
+        <div class="field">
+          <label for="fieldD">ตาชั่งเล็ก 2 (บันทึกน้ำหนักที่ชั่งได้)</label>
+          <input id="fieldD" name="fieldD" type="text" required>
+          <div class="hint">เชื่อมกับ `entry.782980338`</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="submitButton" type="submit">ส่งข้อมูล</button>
+        <div id="message" class="message" aria-live="polite"></div>
+      </div>
+
+      <p class="footnote">
+        ถ้าต้องการเปลี่ยนชื่อหัวข้อให้ตรงกับข้อความใน Google Form แบบเป๊ะ ๆ
+        ผมสามารถปรับให้ได้อีกครั้งจากชื่อฟิลด์จริงของคุณ
+      </p>
+    </form>
+  </section>
+
+  <iframe name="submitFrame" id="submitFrame"></iframe>
+
+  <script>
+    const GOOGLE_FORM_ACTION =
+      "https://docs.google.com/forms/d/e/1FAIpQLSeKIjdB3hdfPgmaKm5hfgPj-JeG_g9EcjBEaxJArXXEu6NA2A/formResponse";
+
+    const FBZX = "-7582623116235454545";
+    const PARTIAL_RESPONSE = `[null,null,"${FBZX}"]`;
+
+    const customForm = document.getElementById("customForm");
+    const submitButton = document.getElementById("submitButton");
+    const message = document.getElementById("message");
+
+    customForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const recordDate = document.getElementById("recordDate").value;
+      const fieldA = document.getElementById("fieldA").value.trim();
+      const fieldB = document.getElementById("fieldB").value.trim();
+      const fieldC = document.getElementById("fieldC").value.trim();
+      const fieldD = document.getElementById("fieldD").value.trim();
+
+      if (!recordDate || !fieldA || !fieldB || !fieldC || !fieldD) {
+        showMessage("กรอกข้อมูลให้ครบทุกช่องก่อนส่ง", "error");
+        return;
+      }
+
+      const [year, month, day] = recordDate.split("-");
+
+      const submitForm = document.createElement("form");
+      submitForm.method = "POST";
+      submitForm.action = GOOGLE_FORM_ACTION;
+      submitForm.target = "submitFrame";
+      submitForm.style.display = "none";
+
+      const fields = {
+        "entry.1652107535_day": day,
+        "entry.1652107535_month": month,
+        "entry.1652107535_year": year,
+        "entry.1136202422": fieldA,
+        "entry.1761665908": fieldB,
+        "entry.624693527": fieldC,
+        "entry.782980338": fieldD,
+        fvv: "1",
+        partialResponse: PARTIAL_RESPONSE,
+        pageHistory: "0",
+        fbzx: FBZX,
+        submissionTimestamp: "-1"
+      };
+
+      Object.entries(fields).forEach(([name, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.value = value;
+        submitForm.appendChild(input);
+      });
+
+      submitButton.disabled = true;
+      showMessage("กำลังส่งข้อมูล...", "");
+
+      document.body.appendChild(submitForm);
+      submitForm.submit();
+      submitForm.remove();
+
+      window.setTimeout(() => {
+        submitButton.disabled = false;
+        customForm.reset();
+        showMessage("ส่งข้อมูลเรียบร้อยแล้ว", "success");
+      }, 1200);
+    });
+
+    function showMessage(text, kind) {
+      message.textContent = text;
+      message.className = kind ? `message ${kind}` : "message";
+    }
+  </script>
+</body>
+</html>
